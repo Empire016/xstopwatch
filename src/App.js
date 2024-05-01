@@ -30,17 +30,19 @@ class Stopwatch extends Component {
   render() {
     const { time, running } = this.state;
     return (
-      <div c>
+      <div className="stopwatch-container">
         <div className="row">
-          <h1>Stopwatch</h1>
-          <h2>Time: {time.toFixed(2)}</h2>
-          <button onClick={this.start} disabled={running}>
+          <h1 className="stopwatch-title">Stopwatch</h1>
+          <h2 className="stopwatch-time">{time.toFixed(2)}</h2>
+          <button onClick={this.start} disabled={running} className="stopwatch-button">
             Start
           </button>
-          <button onClick={this.stop} disabled={!running}>
+          <button onClick={this.stop} disabled={!running} className="stopwatch-button">
             Stop
           </button>
-          <button onClick={this.reset}>Reset</button>
+          <button onClick={this.reset} className="stopwatch-button">
+            Reset
+          </button>
         </div>
       </div>
     );
