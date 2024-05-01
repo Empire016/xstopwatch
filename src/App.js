@@ -1,52 +1,53 @@
 import './App.css';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class Stopwatch extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      time: 0,
-      running: false
-    };
-  }
+const Stopwatch = () => {
+  const [isRunning, setIsRunning] = useState(false);
+  const [time, setTime] = useState(0);
 
-  start = () => {
-    this.setState({ running: true });
-    this.interval = setInterval(() => {
-      this.setState({ time: this.state.time + 0.01 });
-    }, 10);
+  const handleStart = () => {
+    setIsRunning(true);
   };
 
-  stop = () => {
-    this.setState({ running: false });
-    clearInterval(this.interval);
+  const handleStop = () => {
+    setIsRunning(false);
   };
 
-  reset = () => {
-    this.setState({ time: 0 });
-    clearInterval(this.interval);
+  const handleReset = () => {
+    setIsRunning(false);
+    setTime(0);
   };
 
-  render() {
-    const { time, running } = this.state;
-    return (
-      <div className="stopwatch-container">
-        <div className="row">
-          <h1 className="stopwatch-title">Stopwatch</h1>
-          <h2 className="stopwatch-time">{time.toFixed(2)}</h2>
-          <button onClick={this.start} disabled={running} className="stopwatch-button">
-            Start
-          </button>
-          <button onClick={this.stop} disabled={!running} className="stopwatch-button">
-            Stop
-          </button>
-          <button onClick={this.reset} className="stopwatch-button">
-            Reset
-          </button>
-        </div>
+  React.useEffect(() => {
+    let interval;
+    if (isRunning) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  const formattedTime = `${Math.floor(time / 60)}:${(`0${time % 60}`).slice(-2)}`;
+
+  return (
+    <div className="stopwatch-container">
+      <div className="stopwatch-display">
+        <div className="stopwatch-text">Stopwatch</div>
+        <div className="time">{formattedTime}</div>
       </div>
-    );
-  }
-}
+      <div className="buttons">
+        {isRunning ? (
+          <button onClick={handleStop}>Stop</button>
+        ) : (
+          <button onClick={handleStart}>Start</button>
+        )}
+        <button onClick={handleReset}>Reset</button>
+      </div>
+    </div>
+  );
+};
 
 export default Stopwatch;
